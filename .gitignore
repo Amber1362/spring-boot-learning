@@ -1,0 +1,17 @@
+# IntelliJ IDEA
+.idea/
+
+# Maven build output
+target/
+
+# Logs
+*.log
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Keep Maven wrapper JAR
+!.mvn/wrapper/maven-wrapper.jar
