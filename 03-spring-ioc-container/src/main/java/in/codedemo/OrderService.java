@@ -1,6 +1,8 @@
 package in.codedemo;
 
+import in.codedemo.payment.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -8,7 +10,7 @@ public class OrderService {
     PaymentService payment;
 
     @Autowired
-    OrderService(PaymentService payment) {
+    OrderService(@Qualifier("upiPayment") PaymentService payment) {
         this.payment = payment;
     }
 
