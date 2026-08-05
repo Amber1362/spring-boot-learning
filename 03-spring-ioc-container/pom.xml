@@ -15,6 +15,12 @@
             <version>7.0.7</version>
             <scope>compile</scope>
         </dependency>
+
+        <dependency>
+            <groupId>in.springcoredemo</groupId>
+            <artifactId>SpringCoreDemo</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <properties>

@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
-@Component
-@Qualifier
+//@Component
+@Qualifier("cp")
 public class CardPayment implements PaymentService {
 
     @Override

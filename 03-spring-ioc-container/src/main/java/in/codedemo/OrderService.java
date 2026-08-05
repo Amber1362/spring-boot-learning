@@ -5,12 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class OrderService {
     PaymentService payment;
 
     @Autowired
-    OrderService(@Qualifier("upiPayment") PaymentService payment) {
+    public OrderService(PaymentService payment) {
         this.payment = payment;
     }
 
