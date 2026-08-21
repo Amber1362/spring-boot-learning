@@ -1,5 +1,9 @@
 package com.example.crudSpringBootDemo.controller;
 
+import com.example.crudSpringBootDemo.dto.CreateStudentRequestDto;
+import com.example.crudSpringBootDemo.dto.CreateStudentResponseDto;
+import com.example.crudSpringBootDemo.dto.UpdateStudentRequestDto;
+import com.example.crudSpringBootDemo.dto.UpdateStudentResponseDto;
 import com.example.crudSpringBootDemo.entity.Student;
 import com.example.crudSpringBootDemo.service.StudentService;
 import org.apache.catalina.connector.Response;
@@ -20,15 +24,16 @@ public class StudentController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Student> createStudent(@RequestBody Student student) {
-        Student createdStudent = studentService.createStudent(student);
+    public ResponseEntity<CreateStudentResponseDto> createStudent(
+            @RequestBody CreateStudentRequestDto createStudentRequestDto) {
+        CreateStudentResponseDto createdStudent = studentService.createStudent(createStudentRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(createdStudent);
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<Student> getStudent(@PathVariable Long id) {
-        Student studentRes = studentService.getStudent(id);
+    public ResponseEntity<CreateStudentResponseDto> getStudent(@PathVariable Long id) {
+        CreateStudentResponseDto studentRes = studentService.getStudent(id);
 
         if(studentRes == null) {
             return ResponseEntity
@@ -42,8 +47,8 @@ public class StudentController {
     }
 
     @GetMapping("/getAll")
-    public ResponseEntity<List<Student>> getAllStudents() {
-        List<Student> studentList = studentService.getAllStudent();
+    public ResponseEntity<List<CreateStudentResponseDto>> getAllStudents() {
+        List<CreateStudentResponseDto> studentList = studentService.getAllStudent();
 
         if(studentList.isEmpty()) {
             return ResponseEntity
@@ -57,9 +62,9 @@ public class StudentController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Student> updateStudent(@PathVariable Long id,
-                                                 @RequestBody Student studentReq) {
-        Student studentRes = studentService.updateStudent(id, studentReq);
+    public ResponseEntity<UpdateStudentResponseDto> updateStudent(@PathVariable Long id,
+                                                 @RequestBody UpdateStudentRequestDto updateStudentRequestDto) {
+        UpdateStudentResponseDto studentRes = studentService.updateStudent(id, updateStudentRequestDto);
 
         if(studentRes == null) {
             return ResponseEntity
