@@ -6,6 +6,7 @@ import com.example.crudSpringBootDemo.dto.UpdateStudentRequestDto;
 import com.example.crudSpringBootDemo.dto.UpdateStudentResponseDto;
 import com.example.crudSpringBootDemo.entity.Student;
 import com.example.crudSpringBootDemo.service.StudentService;
+import jakarta.validation.Valid;
 import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class StudentController {
 
     @PostMapping("/create")
     public ResponseEntity<CreateStudentResponseDto> createStudent(
-            @RequestBody CreateStudentRequestDto createStudentRequestDto) {
+            @Valid @RequestBody CreateStudentRequestDto createStudentRequestDto) {
         CreateStudentResponseDto createdStudent = studentService.createStudent(createStudentRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(createdStudent);
