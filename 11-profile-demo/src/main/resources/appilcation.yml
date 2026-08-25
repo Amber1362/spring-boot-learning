@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: profileDemo
+
+server:
+  port: 9999
+
+app:
+  welcome:
+    message: Hello! this is my application
+    code: 200
