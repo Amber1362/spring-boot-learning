@@ -6,9 +6,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.UUID;
 
 //@Component
-public class AuthenticationFilter implements Filter {
+public class ResponseHeaderFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request,
                          ServletResponse response,
@@ -19,20 +20,11 @@ public class AuthenticationFilter implements Filter {
 
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
-        String token = httpServletRequest.getHeader("token");
+        String requestId = UUID.randomUUID().toString();
 
-        if(token == null || !token.equals("123456")) {
-            httpServletResponse.setStatus(401);
-
-            httpServletResponse.setContentType("application/json");
-            httpServletResponse.getWriter().write(
-                    "{\n" +
-                            "    \"message\" : \"Authentication is required\"\n" +
-                            "}"
-            );
-            return;
-        }
+        httpServletResponse.setHeader("x-Request-id", requestId);
 
         chain.doFilter(request, response);
+
     }
 }
