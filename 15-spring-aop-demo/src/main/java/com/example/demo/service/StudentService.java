@@ -1,22 +1,23 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.Student;
 import org.springframework.stereotype.Service;
+
+import java.beans.Transient;
 
 @Service
 public class StudentService {
 
-    public String createStudent() {
+    public Student createStudent(Student student) {
         System.out.println("Student saved successfully");
 
-        return "Student saved";
+        return student;
+    }
 
-//        throw new RuntimeException("Some Error Occurred");
-
-//        try {
-//            throw new RuntimeException("Some Error Occurred");
-//        }
-//        catch (RuntimeException e) {
-//            return  "Student saved";
-//        }
+    @Transient
+    public String getStudent() {
+        String s = "Get all data";
+        System.out.println(s);
+        return s;
     }
 }

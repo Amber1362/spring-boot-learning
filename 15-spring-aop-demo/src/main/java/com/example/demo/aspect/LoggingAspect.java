@@ -46,21 +46,33 @@ public class LoggingAspect {
 //        System.out.println("LogAfterMethod executed");
 //    }
 
-    @Around(
-            value = "execution(String com.example.demo.service.StudentService.createStudent())")
-    public String logAroundMethod(ProceedingJoinPoint joinPoint) throws Throwable {
-        System.out.println("Starting: " + joinPoint.getSignature().getName());
+//    @Around(
+//            value = "execution(String com.example.demo.service.StudentService.createStudent())")
+//    public String logAroundMethod(ProceedingJoinPoint joinPoint) throws Throwable {
+//        System.out.println("Starting: " + joinPoint.getSignature().getName());
+//
+//        try {
+//            String student = (String) joinPoint.proceed();
+//            System.out.println("Execution successful");
+//            return student;
+//        } catch (Exception e) {
+//            System.out.println("Execution failed: " + e.getMessage());
+//            throw e;
+//        }
+//        finally {
+//            System.out.println("Execution completed");
+//        }
+//    }
 
-        try {
-            String student = (String) joinPoint.proceed();
-            System.out.println("Execution successful");
-            return student;
-        } catch (Exception e) {
-            System.out.println("Execution failed: " + e.getMessage());
-            throw e;
-        }
-        finally {
-            System.out.println("Execution completed");
-        }
+    @Before("com.example.demo.aspect.ApplicationPointcut.publicServiceMethod()")
+    public void logBeforeMethod() {
+        System.out.println("Method Intercepted");
     }
+
+//    @Before("execution(com.example.demo.dto.Student " +
+//            "com.example.demo.service.StudentService.createStudent(" +
+//            "com.example.demo.dto.Student))")
+//    public void logBeforeMethod2() {
+//        System.out.println("Method Intercepted");
+//    }
 }
