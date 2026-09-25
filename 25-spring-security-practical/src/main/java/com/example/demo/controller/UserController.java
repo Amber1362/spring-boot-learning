@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.UserRegisterRequestDto;
 import com.example.demo.dto.UserRegisterResponseDto;
 import com.example.demo.service.AuthService;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,7 +33,7 @@ public class UserController {
 //                "secret123",
 //                "$2a$10$6BK.XCl/A/AMBwPjHosSyOICAF1kpAN0nO8.zzZXRj8sLp9NqKe.K"
 //        ));
-        return "Hello";
+        return "Hello!";
     }
 
     @PostMapping("/register")
