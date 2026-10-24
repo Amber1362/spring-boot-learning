@@ -2,7 +2,9 @@ package com.project.gatekeeper.management.controller;
 
 import com.project.gatekeeper.management.dto.RequestDto.OrganizationRequest;
 import com.project.gatekeeper.management.dto.RequestDto.OrganizationStatusRequest;
+import com.project.gatekeeper.management.dto.RequestDto.TenantAdminRequest;
 import com.project.gatekeeper.management.dto.ResponseDto.OrganizationResponse;
+import com.project.gatekeeper.management.dto.ResponseDto.TenantAdminResponse;
 import com.project.gatekeeper.management.entity.Organization;
 import com.project.gatekeeper.management.service.OrganizationService;
 import jakarta.validation.Valid;
@@ -68,6 +70,32 @@ public class PlatformOrganizationController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         organizationService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    //CRUD --> Tenant Admins
+    @PostMapping("/{organizationId}/tenant-admin")
+    public ResponseEntity<TenantAdminResponse> createTenantAdmin(@PathVariable Long organizationId,
+                                                                 @Valid @RequestBody TenantAdminRequest request) {
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(organizationService.createTenantAdmin(organizationId, request));
+    }
+
+    @GetMapping("/{organizationId}/tenant-admin")
+    public ResponseEntity<TenantAdminResponse> getTenantAdmin(@PathVariable Long organizationId) {
+        return ResponseEntity.ok(organizationService.getTenantAdmin(organizationId));
+    }
+
+    @PutMapping("/{organizationId}/tenant-admin")
+    public ResponseEntity<TenantAdminResponse> updateTenantAdmin(@PathVariable Long organizationId,
+                                                                 @Valid @RequestBody TenantAdminRequest request) {
+        return ResponseEntity.ok(organizationService.updateTenantAdmin(organizationId, request));
+    }
+
+    @DeleteMapping("/{organizationId}/tenant-admin")
+    public ResponseEntity<Void> deleteTenantAdmin(@PathVariable Long organizationId) {
+        organizationService.deleteTenantAdmin(organizationId);
         return ResponseEntity.noContent().build();
     }
 }
