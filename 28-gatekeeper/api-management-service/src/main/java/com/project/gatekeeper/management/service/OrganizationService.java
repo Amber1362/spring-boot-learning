@@ -3,6 +3,7 @@ package com.project.gatekeeper.management.service;
 import com.project.gatekeeper.management.dto.RequestDto.OrganizationRequest;
 import com.project.gatekeeper.management.dto.RequestDto.OrganizationStatusRequest;
 import com.project.gatekeeper.management.dto.RequestDto.TenantAdminRequest;
+import com.project.gatekeeper.management.dto.RequestDto.TenantOrganizationRequest;
 import com.project.gatekeeper.management.dto.ResponseDto.OrganizationResponse;
 import com.project.gatekeeper.management.dto.ResponseDto.TenantAdminResponse;
 import com.project.gatekeeper.management.entity.ManagementUser;
@@ -13,6 +14,7 @@ import com.project.gatekeeper.management.exception.ApiException;
 import com.project.gatekeeper.management.repository.ManagementUserRepository;
 import com.project.gatekeeper.management.repository.OrganizationRepository;
 import com.project.gatekeeper.management.repository.RoleRepository;
+import com.sun.net.httpserver.HttpsConfigurator;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,15 +31,18 @@ public class OrganizationService {
     private final ManagementUserRepository managementUserRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final TenantContext tenantContext;
 
     public OrganizationService(OrganizationRepository organizationRepository,
                                ManagementUserRepository managementUserRepository,
                                RoleRepository roleRepository,
-                               PasswordEncoder passwordEncoder) {
+                               PasswordEncoder passwordEncoder,
+                               TenantContext tenantContext) {
         this.organizationRepository = organizationRepository;
         this.managementUserRepository = managementUserRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.tenantContext = tenantContext;
     }
 
     @Transactional
@@ -141,6 +146,7 @@ public class OrganizationService {
         }
     }
 
+    // Tenant Admin CRUD
 
     @Transactional
     public TenantAdminResponse createTenantAdmin(Long organizationId, TenantAdminRequest request) {
@@ -209,6 +215,29 @@ public class OrganizationService {
         getOrganization(organizationId);
         return managementUserRepository.findByOrganizationId(organizationId)
                 .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Tenant administrator not found"));
+    }
+
+    //Methods for Tenant Admin
+    @Transactional(readOnly = true)
+    public OrganizationResponse getOwnOrganization() {
+        return OrganizationResponse.from(tenantContext.getOrganization());
+    }
+
+    @Transactional
+    public OrganizationResponse updateOwnOrganization(TenantOrganizationRequest request) {
+        long startedAt = System.nanoTime();
+
+        Organization organization = tenantContext.getOrganization();
+
+        if(!organization.getName().equalsIgnoreCase(request.getName())
+              && organizationRepository.existsByNameIgnoreCase(request.getName())) {
+            throw new ApiException(HttpStatus.CONFLICT, "Organization name already exist");
+        }
+
+        organization.setName(request.getName());
+        organization.setUpdatedAt(LocalDateTime.now());
+
+        return OrganizationResponse.from(organization);
     }
 
 }
