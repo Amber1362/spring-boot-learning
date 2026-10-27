@@ -30,6 +30,4 @@ public class TenantOrganizationController {
             ) {
         return ResponseEntity.ok(organizationService.updateOwnOrganization(request));
     }
-
-
 }
