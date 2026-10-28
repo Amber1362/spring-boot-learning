@@ -123,7 +123,7 @@ public class RouteService {
                     "pathPattern must start with the tenant prefix " + tenantPrefix);
         }
 
-        if(!request.getTargetBaseUrl().startsWith("/")) {
+        if(!request.getTargetPathPrefix().startsWith("/")) {
             throw new ApiException(HttpStatus.BAD_REQUEST,
                     "targetPathPrefix must start with /");
         }
