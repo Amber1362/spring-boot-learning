@@ -6,6 +6,7 @@ import com.project.gatekeeper.management.dto.RequestDto.RouteStatusRequest;
 import com.project.gatekeeper.management.dto.ResponseDto.RouteResponse;
 import com.project.gatekeeper.management.entity.ApiRoute;
 import com.project.gatekeeper.management.entity.Organization;
+import com.project.gatekeeper.management.entity.OrganizationStatus;
 import com.project.gatekeeper.management.entity.RouteHeaderRule;
 import com.project.gatekeeper.management.exception.ApiException;
 import com.project.gatekeeper.management.repository.ApiRouteRepository;
@@ -213,5 +214,13 @@ public class RouteService {
             response.add(RouteResponse.from(route));
         }
         return response;
+    }
+
+    //GATEWAY METHODS
+    @Transactional(readOnly = true)
+    public List<RouteResponse> findAllActiveForGateway() {
+        return toResponses(apiRouteRepository
+                .findAllByActiveTrueAndOrganizationStatus(
+                        OrganizationStatus.ACTIVE));
     }
 }
