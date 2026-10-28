@@ -3,6 +3,7 @@ package com.project.gatekeeper.management.controller;
 import com.project.gatekeeper.management.dto.RequestDto.RouteRequest;
 import com.project.gatekeeper.management.dto.RequestDto.RouteStatusRequest;
 import com.project.gatekeeper.management.dto.ResponseDto.RouteResponse;
+import com.project.gatekeeper.management.dto.ResponseDto.RouteVersionResponse;
 import com.project.gatekeeper.management.service.RouteService;
 import jakarta.validation.Valid;
 import org.apache.catalina.connector.Response;
@@ -63,5 +64,12 @@ public class TenantRouteController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         routeService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/route-version/{routeId}")
+    public ResponseEntity<List<RouteVersionResponse>> getVersions(
+            @PathVariable String routeId
+    ) {
+        return ResponseEntity.ok(routeService.getVersions(routeId));
     }
 }
