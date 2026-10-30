@@ -2,6 +2,7 @@ package com.project.gatekeeper.management.controller;
 
 import com.project.gatekeeper.management.dto.RequestDto.RouteRequest;
 import com.project.gatekeeper.management.dto.RequestDto.RouteStatusRequest;
+import com.project.gatekeeper.management.dto.ResponseDto.AuditRecordResponse;
 import com.project.gatekeeper.management.dto.ResponseDto.RouteResponse;
 import com.project.gatekeeper.management.dto.ResponseDto.RouteVersionResponse;
 import com.project.gatekeeper.management.service.RouteService;
@@ -71,5 +72,10 @@ public class TenantRouteController {
             @PathVariable String routeId
     ) {
         return ResponseEntity.ok(routeService.getVersions(routeId));
+    }
+
+    @GetMapping("/audit-records")
+    public ResponseEntity<List<AuditRecordResponse>> getAuditRecords() {
+        return ResponseEntity.ok(routeService.getAuditRecords());
     }
 }
