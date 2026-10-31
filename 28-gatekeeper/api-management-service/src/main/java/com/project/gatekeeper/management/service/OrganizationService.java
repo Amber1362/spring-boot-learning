@@ -165,7 +165,7 @@ public class OrganizationService {
         }
     }
 
-    // Tenant Admin CRUD
+    // TENANT ADMIN CRUD >>>>>
 
     @Transactional
     public TenantAdminResponse createTenantAdmin(Long organizationId, TenantAdminRequest request) {
