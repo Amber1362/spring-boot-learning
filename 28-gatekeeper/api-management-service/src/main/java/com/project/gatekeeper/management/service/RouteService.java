@@ -7,6 +7,7 @@ import com.project.gatekeeper.management.dto.ResponseDto.AuditRecordResponse;
 import com.project.gatekeeper.management.dto.ResponseDto.RouteResponse;
 import com.project.gatekeeper.management.dto.ResponseDto.RouteVersionResponse;
 import com.project.gatekeeper.management.entity.*;
+import com.project.gatekeeper.management.event.GatewayConfigurationEventService;
 import com.project.gatekeeper.management.exception.ApiException;
 import com.project.gatekeeper.management.repository.ApiRouteRepository;
 import com.project.gatekeeper.management.repository.ControlPlaneAuditRecordRepository;
@@ -31,19 +32,22 @@ public class RouteService {
     private final RouteConfigurationVersionRepository versionRepository;
     private final AuditService auditService;
     private final ControlPlaneAuditRecordRepository auditRecordRepository;
+    private final GatewayConfigurationEventService configurationEventService;
 
     public RouteService(ApiRouteRepository apiRouteRepository,
                         TenantContext tenantContext,
                         ObjectMapper objectMapper,
                         RouteConfigurationVersionRepository versionRepository,
                         AuditService auditService,
-                        ControlPlaneAuditRecordRepository auditRecordRepository) {
+                        ControlPlaneAuditRecordRepository auditRecordRepository,
+                        GatewayConfigurationEventService configurationEventService) {
         this.auditService = auditService;
         this.apiRouteRepository = apiRouteRepository;
         this.tenantContext = tenantContext;
         this.objectMapper = objectMapper;
         this.versionRepository = versionRepository;
         this.auditRecordRepository = auditRecordRepository;
+        this.configurationEventService = configurationEventService;
     }
 
     @Transactional
@@ -72,6 +76,9 @@ public class RouteService {
         auditService.record(organization, "CREATE_ROUTE", "API_ROUTE",
                 route.getRouteId(), startedAt,
                 "Route configuration version 1 created");
+
+        configurationEventService.publish("CREATED", organization.getId(),
+                route.getRouteId(), route.getConfigurationVersion());
 
         return RouteResponse.from(route);
     }
@@ -111,6 +118,9 @@ public class RouteService {
                 route.getRouteId(), startedAt,
                 "Route configuration version " + route.getConfigurationVersion() + " created");
 
+        configurationEventService.publish("UPDATED", organization.getId(),
+                route.getRouteId(), route.getConfigurationVersion());
+
         return RouteResponse.from(route);
     }
 
@@ -133,6 +143,9 @@ public class RouteService {
                 route.getRouteId(), startedAt,
                 "Route configuration version " + route.getConfigurationVersion() + " created");
 
+        configurationEventService.publish(changeType, organization.getId(),
+                route.getRouteId(), route.getConfigurationVersion());
+
         return RouteResponse.from(route);
     }
 
@@ -150,6 +163,9 @@ public class RouteService {
         auditService.record(organization, "DELETE_ROUTE", "API_ROUTE",
                 route.getRouteId(), startedAt,
                 "Final configuration version saved as version " + route.getConfigurationVersion());
+
+        configurationEventService.publish("DELETED", organization.getId(),
+                route.getRouteId(), route.getConfigurationVersion());
 
         apiRouteRepository.delete(route);
     }
